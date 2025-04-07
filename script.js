@@ -1,1 +1,1 @@
-console.log("Welcome to Diwash's Portfolio. Stay curious!");
+console.log("Welcome to my. Stay curious!");
