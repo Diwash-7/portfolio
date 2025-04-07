@@ -64,7 +64,21 @@
     padding: 2rem;
     font-size: 0.9rem;
     color: #8b949e;
+    display: flex;
+    justify-content:space-between;
+    
   }
+  footer ul{
+    
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+  }
+  footer ul li{
+    margin: 5px;
+  }
+
+  
   
   a {
     color: var(--accent-color);

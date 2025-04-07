@@ -1,1 +1,1 @@
-console.log("Welcome to my. Stay curious!");
+console.log("Welcome to my website. Stay curious!");
