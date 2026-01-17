@@ -1,21 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+
+
 :root {
-    --bg-color: #0d1117;
-    --text-color: #c9d1d9;
-    --accent-color: #a970ff;
-    --card-bg: #161b22;
+    --bg-color: #000000;
+    --text-color: #d0c5c5;
+    --accent-color: #fdfdfd;
+    --card-bg: #0d0d0f;
   }
   
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Pixelify Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
   
   body {
     background-color: var(--bg-color);
+    overflow-x: hidden;
     color: var(--text-color);
     line-height: 1.6;
+
+  /* --- FIX START --- */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;/* This forces body to be at least the full screen height */
+    margin: 0;
+    /* --- FIX END --- */
+    
   }
   
   header {
@@ -24,12 +36,12 @@
   }
   
   header h1 {
-    font-size: 2.5rem;
+    font-size: 4rem;
     color: var(--accent-color);
   }
   
   header p {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     margin-top: 0.5rem;
   }
   
@@ -40,6 +52,13 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 2rem;
+
+  /* --- FIX START --- */
+    flex: 1;
+    /* This tells the main content to grow and push the footer down */
+    width: 100%;
+    /* --- FIX END --- */
+
   }
   
   .card {
@@ -57,12 +76,13 @@
   .card h2 {
     color: var(--accent-color);
     margin-bottom: 0.5rem;
+    font-size: 2rem;
   }
   
   footer {
     text-align: center;
     padding: 2rem;
-    font-size: 0.9rem;
+    font-size: rem;
     color: #8b949e;
     display: flex;
     justify-content:space-between;
@@ -84,3 +104,34 @@
     color: var(--accent-color);
     text-decoration: none;
   }
+
+
+  /* This class handles the "background" behavior */
+.decor-img {
+    position: absolute;
+    z-index: -1;      /* Sends it behind your content */
+    opacity: 0.25;     /* Makes it subtle/faded */
+    pointer-events: none; /* Allows you to click "through" it */
+}
+
+/* Position each shape specifically */
+#shape1 {
+    top: 60%;
+    left:-110px;      /* Peeking out from the left edge */
+    width: 350px;
+    transform: rotate(-15deg);
+}
+
+#shape2 {
+    top: 30%;
+    left: 65%;
+    width: 500px;
+    transform: rotate(20deg);
+}
+
+#shape3 {
+    width: 700px;
+    bottom: 70%;
+    left: 25%;
+}
+
