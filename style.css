@@ -12,7 +12,7 @@ body {
   background-color: #000000;
   color: #ffffff;
   /* Using the pixel font to match your mockup */
-  font-family: 'Inter','Pixelify Sans', cursive;
+  font-family:'Pixelify Sans', cursive;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,7 +21,7 @@ body {
 }
 
 /* The wrapper that holds both left and right sides */
-.lock-screen {
+.main-screen {
   display: flex;
   align-items: center;
   gap: 60px;
@@ -37,8 +37,8 @@ body {
   align-items: center;
   /* I added a dashed box so you can see where it goes. 
      Delete this border when you add your real image! */
-  border: 2px dashed #444;
-  border-radius: 20px;
+  /* border: 2px dashed #444;
+  border-radius: 20px; */
 }
 
 .logo-placeholder {
@@ -67,7 +67,7 @@ body {
   font-size: 6rem;
   /* Huge text! */
   letter-spacing: 2px;
-  text-shadow: 3px 3px 0px #333;
+  /* text-shadow: 3px 3px 0px #333; */
   /* Gives it that retro 8-bit depth */
 }
 
