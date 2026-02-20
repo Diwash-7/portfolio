@@ -1,181 +1,102 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-
-
-
-:root {
-    --bg-color: #000000;
-    --text-color: #d0c5c5;
-    --accent-color: #fdfdfd;
-    --card-bg: #0d0d0f;
-  }
-  
-  * {
-    /* outline: 1px solid red !important; */
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  body {
-    background-color: var(--bg-color);
-    overflow-x: hidden;
-    color: var(--text-color);
-    line-height: 1.6;
-
-  /* --- FIX START --- */
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;/* This forces body to be at least the full screen height */
-    margin: 0;
-    /* --- FIX END --- */
-    
-  }
-  
-  header {
-    padding: 2rem;
-    text-align: center;
-  }
-  
-  header h1 {
-    font-size: 4rem;
-    color: var(--accent-color);
-  }
-  
-  header p {
-    font-size: 1.5rem;
-    margin-top: 0.5rem;
-  }
-  
-  main {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem;
-
-  /* --- FIX START --- */
-    flex: 1;
-    /* This tells the main content to grow and push the footer down */
-    width: 100%;
-    /* --- FIX END --- */
-
-  }
-  
-  .card {
-    background-color: var(--card-bg);
-    border: 1px solid #30363d;
-    border-radius: 8px;
-    padding: 1.5rem;
-    transition: transform 0.2s ease;
-  }
-  
-  .card:hover {
-    transform: scale(1.02);
-  }
-  
-  .card h2 {
-    color: var(--accent-color);
-    margin-bottom: 0.5rem;
-    font-size: 2rem;
-  }
-  
-  footer {
-    text-align: center;
-    padding: 2rem;
-    font-size: rem;
-    color: #8b949e;
-    display: flex;
-    justify-content:space-between;
-    
-  }
-  footer ul{
-    
-    list-style-type: none;
-    display: flex;
-    justify-content: space-between;
-  }
-  footer ul li{
-    margin: 5px;
-  }
-
-  
-  
-  a {
-    color: var(--accent-color);
-    text-decoration: none;
-  }
-
-
-  /* This class handles the "background" behavior */
-.decor-img {
-    position: absolute;
-    z-index: -1;      /* Sends it behind your content */
-    opacity: 0.25;     /* Makes it subtle/faded */
-    pointer-events: none; /* Allows you to click "through" it */
+/* Reset basic spacing */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Position each shape specifically */
-#shape1 {
-    top: 60%;
-    left:-110px;      /* Peeking out from the left edge */
-    width: 350px;
-    transform: rotate(-15deg);
+body {
+  background-color: #000000;
+  color: #ffffff;
+  /* Using the pixel font to match your mockup */
+  font-family: 'VT323', monospace;
+  /* Centers everything vertically and horizontally on the whole page */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
 }
 
-#shape2 {
-    top: 30%;
-    left: 65%;
-    width: 500px;
-    transform: rotate(20deg);
+/* The wrapper that holds both left and right sides */
+.lock-screen {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  /* The space between your logo and your name */
 }
 
-#shape3 {
-    width: 700px;
-    bottom: 70%;
-    left: 25%;
+/* --- LEFT SIDE: LOGO --- */
+.logo-container {
+  width: 250px;
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* I added a dashed box so you can see where it goes. 
+     Delete this border when you add your real image! */
+  border: 2px dashed #444;
+  border-radius: 20px;
 }
 
-/* Mobile Styles (Screens smaller than 768px) */
-@media only screen and (max-width: 768px) {
+.logo-placeholder {
+  color: #666;
+  font-family: sans-serif;
+  text-align: center;
+}
 
-  header h1 {
-    font-size: 2.5rem;
-    /* Shrink title so it doesn't push the page wide */
-  }
+/* Make sure your future image fits in the box */
+.logo-container img {
+  width: 100%;
+  height: auto;
+}
 
-  header p {
-    font-size: 1.1rem;
-  }
+/* --- RIGHT SIDE: INFO --- */
+.info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Keeps the name and icons centered with each other */
+  gap: 15px;
+  /* Space between the name and the icons */
+}
 
-  /* Resize the decorative shapes so they don't leak */
-  /* #shape1 {
-    width: 150px;
-    left: -50px;
-  } */
-  
-  #shape2 {
-    width: 250px;
-    left: 50%;
-    /* Bring it back into view */
-  }
+.name {
+  font-size: 6rem;
+  /* Huge text! */
+  letter-spacing: 2px;
+  text-shadow: 3px 3px 0px #333;
+  /* Gives it that retro 8-bit depth */
+}
 
-  #shape3 {
-    width: 450px;
-    left: 0;
-    bottom: 80%;
-  }
+/* --- SOCIAL ICONS --- */
+.socials {
+  display: flex;
+  gap: 30px;
+  /* Space between each icon */
+}
 
-  footer {
-    flex-direction: column;
-    /* Stack footer items vertically on mobile */
-    gap: 1rem;
-    align-items: center;
-  }
+.social-icon {
+  font-size: 3rem;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+  /* Smooth animation for hovering */
+}
 
-  footer ul {
-    padding: 0;
-    justify-content: center;
-  }
+/* Adding your specific colors */
+.discord {
+  color: #5865F2;
+}
+
+.gmail {
+  color: #EA4335;
+}
+
+.github {
+  color: #FFFFFF;
+}
+
+/* A cool "pop" effect when you hover over the icons */
+.social-icon:hover {
+  transform: scale(1.2) translateY(-5px);
 }
