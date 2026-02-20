@@ -8,6 +8,72 @@
   box-sizing: border-box;
 }
 
+/* Change all visited links to gray */
+a:visited {
+  color: #888888;
+}
+
+/* If you want to make sure your Social Icons DON'T turn gray 
+   (so they keep their brand colors), add this specifically: */
+.social-icon:visited {
+  color: inherit;
+}
+
+/* If you want the webring links to stay gray once visited: */
+.webring-link:visited {
+  color: #555555;
+}
+
+/* --- TOP CONSTRUCTION BANNER --- */
+.construction-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #ffcc00;
+  /* Caution Yellow */
+  color: #000;
+  /* Black text for contrast */
+  height: 30px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  /* Hides the text that goes off-screen */
+  font-weight: bold;
+  font-family: 'Pixelify Sans', cursive;
+  z-index: 9999;
+  /* Keeps it above everything */
+  border-bottom: 2px solid #000;
+}
+
+.marquee {
+  display: flex;
+  white-space: nowrap;
+  animation: scroll-text 15s linear infinite;
+}
+
+.marquee span {
+  padding-right: 50px;
+  /* Space between each repeating message */
+  font-size: 1rem;
+}
+
+/* The magic animation that moves the text */
+@keyframes scroll-text {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Adjust your main screen so the banner doesn't cover your name */
+.main-screen {
+  margin-top: 30px;
+}
+
 body {
   background-color: #000000;
   color: #ffffff;
@@ -87,18 +153,73 @@ body {
 
 /* Adding your specific colors */
 .discord {
-  color: #5865F2;
+  /* color: #5865F2; */
 }
 
 .gmail {
-  color: #EA4335;
+  color: #FFFFFF;
 }
 
 .github {
-  color: #FFFFFF;
+  /* color: #FFFFFF; */
 }
 
 /* A cool "pop" effect when you hover over the icons */
 .social-icon:hover {
   transform: scale(1.2) translateY(-5px);
 }
+
+/* --- FLOATING FOOTER (No Background) --- */
+.taskbar {
+  position: fixed;
+  bottom: 10px;
+  /* Lifted slightly off the bottom for a cleaner look */
+  width: 100%;
+  height: 60px;
+  background: transparent;
+  /* Background removed */
+  backdrop-filter: none;
+  /* Blur removed */
+  border-top: none;
+  /* Line removed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 100;
+}
+
+.webring-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Styling for the middle home link */
+.webring-home-link {
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.webring-title {
+  font-family: 'Pixelify Sans', cursive;
+  font-size: 1rem;
+  color: #555;
+  /* Subtle grey so it doesn't distract from your name */
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Keeps pixel icons sharp */
+.pixel-icon {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Bounce effect on hover */
+/* .webring-link:hover .pixel-icon {
+  transform: scale(1.3);
+  filter: brightness(1.5);
+} */
