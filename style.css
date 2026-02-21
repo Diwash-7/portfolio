@@ -146,7 +146,7 @@ body {
 }
 
 .socials img {
-  height: 5rem ;
+  height: 4rem ;
   object-fit: contain;
   /* transition: transform 0.2s ease; */
   opacity: 0.5;
