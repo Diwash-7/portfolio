@@ -249,3 +249,50 @@ body {
     font-size: 3rem;
   }
 }
+
+/* =========================================
+   FLOATING TEXT FLICKERS
+   ========================================= */
+
+.floating-texts {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.float-text {
+  position: absolute;
+  font-family: 'Pixelify Sans', cursive;
+  font-size: 0.85rem;
+  color: #ffffff;
+  opacity: 0;
+  white-space: nowrap;
+  animation: flicker var(--dur, 2s) ease-in-out forwards;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes flicker {
+  0%   { opacity: 0; }
+  10%  { opacity: 0.6; }
+  15%  { opacity: 0.1; }
+  20%  { opacity: 0.55; }
+  25%  { opacity: 0.05; }
+  35%  { opacity: 0.5; }
+  50%  { opacity: 0.4; }
+  70%  { opacity: 0.35; }
+  85%  { opacity: 0.15; }
+  95%  { opacity: 0.3; }
+  100% { opacity: 0; }
+}
+
+/* Make sure main content sits above the floating layer */
+.main-screen {
+  position: relative;
+  z-index: 1;
+}
+
+.taskbar {
+  z-index: 100;
+}
