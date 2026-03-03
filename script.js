@@ -1,87 +1,68 @@
 console.log("Welcome to my website. Stay curious!");
 
-const phrases = [
-  "i like to draw",
-  "i like to code",
-  "creating bugs since 2024",
-  "pixel art enjoyer",
-  "still learning :)",
-  "git push --force",
-  "it works on my machine",
-  "undefined is not a function",
-  "i should be sleeping",
-  "ctrl + z everything",
-];
-
-// Inject styles directly into the page — bypasses any CSS caching issues
-const style = document.createElement("style");
-style.textContent = `
-  #floatingTexts {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-  }
-  .float-text {
-    position: absolute !important;
-    display: block !important;
-    font-family: 'Pixelify Sans', cursive;
-    font-size: 0.85rem;
-    color: #ffffff;
-    opacity: 0;
-    white-space: nowrap;
-    text-shadow: 0 0 8px rgba(255,255,255,0.3);
-    animation: floatFlicker 2s ease-in-out forwards;
-  }
-  @keyframes floatFlicker {
-    0%   { opacity: 0; }
-    10%  { opacity: 0.6; }
-    15%  { opacity: 0.1; }
-    20%  { opacity: 0.55; }
-    25%  { opacity: 0.05; }
-    35%  { opacity: 0.5; }
-    50%  { opacity: 0.4; }
-    70%  { opacity: 0.35; }
-    85%  { opacity: 0.15; }
-    95%  { opacity: 0.3; }
-    100% { opacity: 0; }
-  }
+// --- Matrix Rain ---
+const canvas = document.createElement("canvas");
+canvas.id = "matrixCanvas";
+canvas.style.cssText = `
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.65;
 `;
-document.head.appendChild(style);
+document.body.insertBefore(canvas, document.body.firstChild);
 
-const container = document.getElementById("floatingTexts");
+// Make sure main content is above canvas
+document.querySelector(".main-screen").style.position = "relative";
+document.querySelector(".main-screen").style.zIndex = "1";
+document.querySelector(".taskbar").style.zIndex = "100";
 
-function randomBetween(min, max) {
-  return Math.random() * (max - min) + min;
+const ctx = canvas.getContext("2d");
+
+// Mix of katakana, latin, digits — classic cmatrix vibe
+const chars = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&";
+
+const fontSize = 17;
+let columns, drops;
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  columns = Math.floor(canvas.width / fontSize);
+  drops = Array.from({ length: columns }, () => Math.random() * -100);
 }
 
-function spawnText() {
-  const el = document.createElement("span");
-  el.classList.add("float-text");
-  el.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+resize();
+window.addEventListener("resize", resize);
 
-  // Set position via inline styles — guaranteed to work
-  el.style.position = "absolute";
-  el.style.display = "block";
-  el.style.left = randomBetween(3, 85) + "vw";
-  el.style.top = randomBetween(8, 85) + "vh";
-  el.style.transform = "rotate(" + randomBetween(-15, 15) + "deg)";
+function draw() {
+  // Semi-transparent black fade — creates the trail effect
+  ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  const duration = randomBetween(1.5, 3.5);
-  el.style.animationDuration = duration + "s";
+  ctx.font = fontSize + "px 'Pixelify Sans', monospace";
 
-  container.appendChild(el);
+  for (let i = 0; i < drops.length; i++) {
+    const char = chars[Math.floor(Math.random() * chars.length)];
+    const x = i * fontSize;
+    const y = drops[i] * fontSize;
 
-  setTimeout(() => el.remove(), duration * 1000 * 3);
+    // Head of the stream is bright white, rest is dim green-white
+    if (drops[i] * fontSize > 0 && Math.random() > 0.975) {
+      ctx.fillStyle = "#ffffff";
+    } else {
+      ctx.fillStyle = "#3a3a3a";
+    }
+
+    ctx.fillText(char, x, y);
+
+    // Reset drop randomly after it passes the bottom
+    if (y > canvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
+    }
+    drops[i] += 0.5;
+  }
 }
 
-function scheduleNext() {
-  const delay = randomBetween(400, 1400);
-  setTimeout(() => {
-    spawnText();
-    scheduleNext();
-  }, delay);
-}
-
-scheduleNext();
+setInterval(draw, 40);
