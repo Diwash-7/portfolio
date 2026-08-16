@@ -15,25 +15,66 @@
 
   <div class="floating-texts" id="floatingTexts"></div>
 
-  <div class="main-screen">
+  <div class="snap-container" id="snapContainer">
 
-    <div class="logo-container">
-      <div class="logo-placeholder"><img src="./graphics/op.png" alt="logo"></div>
-    </div>
+    <div class="hero-section">
+      <div class="main-screen">
 
-    <div class="info-container">
-      <h1 class="name">diwash</h1>
+        <div class="logo-container">
+          <div class="logo-placeholder"><img src="./graphics/op.png" alt="logo"></div>
+        </div>
 
-      <div class="socials">
-        <a href="https://discord.com/users/692999678219911209" target="_blank" class="social-icon discord"><img src="./graphics/discord2.png" alt="Discord"></a>
-        <a href="mailto:ytubers80@gmail.com" target="_blank" class="social-icon gmail"><img src="./graphics/mail.png" alt="Mail"></a>
-        <a href="https://github.com/Diwash-7" target="_blank" class="social-icon github"><img src="./graphics/github.png" alt="GitHub"></a>
+        <div class="info-container">
+          <h1 class="name">diwash</h1>
+
+          <div class="discord-status-badge" id="discord-status-row">
+            <span id="status-dot" class="status-dot offline"></span>
+            <div class="discord-status-text">
+              <span id="status-text">connecting...</span>
+              <span id="discord-activity" class="discord-activity"></span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
+
+    <section class="stats-section">
+      <h2 class="stats-section-title">stats</h2>
+
+      <div class="stats-content">
+
+        <div class="stats-block">
+          <h3 class="stats-block-label">github activity</h3>
+          <a href="https://github.com/Diwash-7" target="_blank" class="github-heatmap-link">
+            <div id="github-heatmap" class="github-heatmap">
+              <span class="heatmap-loading">loading activity...</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="stat-badge">
+          <span class="stat-icon">⌨</span>
+          <div class="stat-badge-text">
+            <span id="typing-stat" class="stat-value">loading...</span>
+            <span class="stat-label">monkeytype personal best</span>
+          </div>
+        </div>
+
+        <!-- more stat-badge or stats-block sections can be added here later -->
+
+      </div>
+    </section>
 
   </div>
 
   <footer class="taskbar">
+    <div class="footer-socials">
+      <a href="https://discord.com/users/692999678219911209" target="_blank" class="footer-social-link">discord</a>
+      <a href="mailto:ytubers80@gmail.com" target="_blank" class="footer-social-link">mail</a>
+      <a href="https://github.com/Diwash-7" target="_blank" class="footer-social-link">github</a>
+    </div>
+
     <div class="webring-container">
 
       <a href="https://hotlinewebring.club/diwash/previous" class="webring-link">

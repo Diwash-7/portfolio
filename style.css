@@ -7,6 +7,31 @@
   box-sizing: border-box;
 }
 
+/* =========================================
+   TYPE SCALE
+   Every text size on the page is a fixed ratio
+   of --name-size, so as it scales fluidly with
+   the viewport (via clamp), everything else scales
+   with it in proportion — sizes stay harmonic
+   instead of jumping independently at breakpoints.
+   ========================================= */
+:root {
+  --name-size: clamp(2.8rem, 8vw, 6rem);
+  --status-size: clamp(1.05rem, 2.6vw, 1.4rem);   /* "Online" / "Do Not Disturb" */
+  --activity-size: clamp(0.8rem, 1.8vw, 0.95rem);  /* "playing X" line, smallest labels */
+  --webring-size: clamp(0.9rem, 2vw, 1.05rem);
+  --social-size: clamp(0.85rem, 1.9vw, 1rem);
+
+  --logo-size: clamp(110px, 22vw, 250px);
+  --badge-width: clamp(190px, 34vw, 340px);
+  --badge-height: clamp(52px, 9vw, 68px);
+
+  /* Follows the matrix rain color easter egg — updated live from JS
+     whenever the rain theme changes (including rainbow mode), so any
+     element using this variable stays visually in sync with it. */
+  --accent-color: #e5e5e5;
+}
+
 /* Change all visited links to gray */
 a:visited {
   color: #888888;
@@ -20,15 +45,59 @@ a:visited {
   color: #555555;
 }
 
+html {
+  height: 100%;
+  overflow: hidden; /* the snap-container is the only scroller now, not the page */
+}
+
 body {
   background-color: #000000;
   color: #ffffff;
   font-family: 'Pixelify Sans', cursive;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* =========================================
+   HORIZONTAL SNAP SCROLLING
+   Native CSS scroll-snap does the animation —
+   no JS scroll library, no per-frame animation
+   loop, so it costs almost nothing to run. A
+   small JS listener just redirects vertical
+   wheel/trackpad input into horizontal scrolling,
+   since scroll-snap itself only reacts to
+   horizontal input.
+   ========================================= */
+.snap-container {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+
+.snap-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Edge */
+}
+
+.snap-container > * {
+  flex: 0 0 100vw;
+  width: 100vw;
+  height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* The first full-viewport screen */
+.hero-section {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  overflow-x: hidden;
 }
 
 /* The wrapper that holds both left and right sides */
@@ -41,8 +110,8 @@ body {
 
 /* --- LEFT SIDE: LOGO --- */
 .logo-container {
-  width: 250px;
-  height: 250px;
+  width: var(--logo-size);
+  height: var(--logo-size);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,26 +138,71 @@ body {
 }
 
 .name {
-  font-size: 6rem;
+  font-size: var(--name-size);
   letter-spacing: 2px;
+  color: var(--accent-color);
+  transition: color 0.2s ease;
 }
 
-/* --- SOCIAL ICONS --- */
-.socials {
+/* --- DISCORD STATUS BADGE ---
+   Fixed width AND height (not just min-height) so
+   neither a longer status label (Do Not Disturb vs
+   Online) nor an empty/filled activity line can ever
+   change the box's footprint — that's what was pushing
+   the name around. */
+.discord-status-badge {
   display: flex;
-  gap: 30px;
+  align-items: center;
+  gap: 14px;
+  background: rgba(0, 0, 0, 0.4);
+  border: none;
+  border-radius: 10px;
+  padding: 0 22px;
+  width: var(--badge-width);
+  height: var(--badge-height);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-.socials img {
-  height: 4rem;
-  object-fit: contain;
-  opacity: 0.5;
-  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.status-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px currentColor;
 }
 
-.socials img:hover {
-  transform: scale(1.2);
-  opacity: 1;
+.status-dot.online { background-color: #23a55a; color: #23a55a; }
+.status-dot.idle { background-color: #f0b232; color: #f0b232; }
+.status-dot.dnd { background-color: #f23f43; color: #f23f43; }
+.status-dot.offline { background-color: #80848e; color: #80848e; }
+
+.discord-status-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: 'Pixelify Sans', cursive;
+  line-height: 1.4;
+  min-width: 0; /* lets text-overflow ellipsis kick in instead of growing the box */
+  height: 100%;
+}
+
+#status-text {
+  font-size: var(--status-size);
+  color: var(--accent-color);
+  transition: color 0.2s ease;
+}
+
+.discord-activity {
+  font-size: var(--activity-size);
+  color: var(--accent-color);
+  opacity: 0.55;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 1.4em; /* reserved even when empty, so the badge height never depends on this line having text */
+  transition: color 0.2s ease;
 }
 
 /* --- FLOATING FOOTER --- */
@@ -105,6 +219,30 @@ body {
   align-items: center;
   padding: 0 20px;
   z-index: 100;
+}
+
+/* Social text links, positioned at the left edge of the footer bar */
+.footer-socials {
+  position: absolute;
+  left: 30px;
+  display: flex;
+  gap: 20px;
+}
+
+.footer-social-link {
+  font-family: 'Pixelify Sans', cursive;
+  font-size: var(--social-size);
+  color: #ffffff;
+  text-decoration: none;
+  text-transform: lowercase;
+  letter-spacing: 1px;
+  opacity: 0.5;
+  transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.footer-social-link:hover {
+  opacity: 1;
+  transform: translateY(-2px);
 }
 
 .webring-container {
@@ -124,14 +262,172 @@ body {
 
 .webring-title {
   font-family: 'Pixelify Sans', cursive;
-  font-size: 1rem;
+  font-size: var(--webring-size);
   color: #ffffff;
   letter-spacing: 1px;
   text-transform: uppercase;
 }
 
+/* --- STATS SECTION ---
+   Second snap-scroll panel — holds every "useful info" widget in
+   one place (GitHub activity, MonkeyType, more later) instead of
+   splitting them across separate panels. The page scrolls
+   horizontally to reach it; bottom padding clears the fixed footer. */
+.stats-section {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 20px 20px 90px;
+  text-align: center;
+  overflow-y: auto; /* safety: lets content scroll internally on short viewports instead of clipping */
+}
+
+/* Was just a plain "STATS" label before — swapped for a terminal-
+   prompt style line to actually fit the cmatrix/terminal theme
+   instead of reading like a generic section header. */
+.stats-section-title {
+  font-family: 'Pixelify Sans', cursive;
+  font-size: var(--webring-size);
+  font-weight: normal;
+  letter-spacing: 1px;
+  color: var(--accent-color);
+  opacity: 0.8;
+  transition: color 0.2s ease;
+}
+
+.stats-section-title::before {
+  content: "$ ";
+  opacity: 0.5;
+}
+
+/* Holds each individual widget (github block, typing badge, future
+   additions). Side-by-side as cards on wider screens so they read as
+   two distinct pieces of info instead of a cramped vertical stack;
+   wraps to stacked automatically once a row no longer fits. */
+.stats-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+
+/* Same card treatment as .stat-badge (background, radius, no border)
+   so both widgets carry equal visual weight instead of one being a
+   boxed badge and the other just bare content floating next to it —
+   that mismatch was part of why they read as "too close together". */
+.stats-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  padding: 22px 28px;
+}
+
+.stats-block-label {
+  font-family: 'Pixelify Sans', cursive;
+  font-size: var(--activity-size);
+  font-weight: normal;
+  letter-spacing: 1px;
+  text-transform: lowercase;
+  color: var(--accent-color);
+  opacity: 0.6;
+  transition: color 0.2s ease;
+}
+
+.github-heatmap-link {
+  display: inline-block;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.github-heatmap-link:hover {
+  opacity: 1;
+}
+
+/* Populated at runtime with an inline <svg> (real data via fetch in
+   script.js, mock data in demo-script.js) — using fill="currentColor"
+   on its rects means it automatically follows --accent-color, same
+   as the section title above. Using our own rendering instead of an
+   external image is what makes both the dark background contrast
+   and the rounded cell corners possible — see conversation notes. */
+.github-heatmap {
+  width: min(90vw, 720px);
+  min-height: 90px;
+  color: var(--accent-color);
+  transition: color 0.2s ease;
+}
+
+.github-heatmap svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.heatmap-loading {
+  font-family: 'Pixelify Sans', cursive;
+  font-size: var(--activity-size);
+  opacity: 0.5;
+}
+
+.stat-badge {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(0, 0, 0, 0.4);
+  border: none;
+  border-radius: 10px;
+  padding: 0 22px;
+  width: var(--badge-width);
+  height: var(--badge-height);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.stat-icon {
+  font-size: calc(var(--status-size) * 0.9);
+  color: var(--accent-color);
+  transition: color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.stat-badge-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: 'Pixelify Sans', cursive;
+  line-height: 1.4;
+  min-width: 0;
+  height: 100%;
+  text-align: left;
+}
+
+.stat-value {
+  font-size: var(--status-size);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-label {
+  font-size: var(--activity-size);
+  opacity: 0.55;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 1.4em;
+}
+
 .pixel-icon {
-  width: 30px;
+  width: clamp(20px, 3.5vw, 30px);
   transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -152,9 +448,13 @@ body {
 
 /* =========================================
    RESPONSIVE STYLES
+   Font sizes and box dimensions above already
+   scale fluidly via clamp()/vw — these breakpoints
+   now only handle LAYOUT changes (stacking,
+   direction, spacing), not sizing.
    ========================================= */
 
-/* Tablet: stack vertically, scale down a bit */
+/* Tablet: stack vertically */
 @media (max-width: 768px) {
   .main-screen {
     flex-direction: column;
@@ -163,72 +463,63 @@ body {
     text-align: center;
   }
 
-  .logo-container {
-    width: 180px;
-    height: 180px;
+  .discord-status-badge,
+  .stat-badge {
+    padding: 0 14px;
+    gap: 8px;
+    border-radius: 8px;
   }
 
-  .name {
-    font-size: 4rem;
+  .status-dot {
+    width: 12px;
+    height: 12px;
   }
 
-  .socials img {
-    height: 3rem;
+  .taskbar {
+    height: auto;
+    padding: 10px 16px;
+    flex-direction: column;
+    gap: 8px;
+    bottom: 0;
   }
 
-  .socials {
-    gap: 20px;
+  .footer-socials {
+    position: static;
+    gap: 14px;
   }
 }
 
-/* Mobile: smaller still */
+/* Mobile: tighter spacing still */
 @media (max-width: 480px) {
   .main-screen {
     gap: 20px;
     padding: 20px 16px 80px;
   }
 
-  .logo-container {
-    width: 140px;
-    height: 140px;
+  .discord-status-badge,
+  .stat-badge {
+    padding: 0 12px;
+    gap: 7px;
   }
 
-  .name {
-    font-size: 3rem;
-  }
-
-  .socials img {
-    height: 2.5rem;
-  }
-
-  .socials {
-    gap: 16px;
-  }
-
-  .webring-title {
-    font-size: 0.75rem;
-  }
-
-  .pixel-icon {
-    width: 22px;
+  .status-dot {
+    width: 10px;
+    height: 10px;
   }
 }
 
 /* Very small screens */
 @media (max-width: 320px) {
-  .name {
-    font-size: 2.4rem;
-  }
-
-  .logo-container {
-    width: 110px;
-    height: 110px;
+  .discord-status-badge,
+  .stat-badge {
+    padding: 0 10px;
+    gap: 6px;
   }
 }
 
 /* Landscape phones */
 @media (max-width: 768px) and (orientation: landscape) {
-  body {
+  .hero-section {
     align-items: flex-start;
   }
 
@@ -240,13 +531,10 @@ body {
     align-items: center;
   }
 
-  .logo-container {
-    width: 120px;
-    height: 120px;
-  }
-
-  .name {
-    font-size: 3rem;
+  .discord-status-badge,
+  .stat-badge {
+    padding: 0 12px;
+    gap: 7px;
   }
 }
 
